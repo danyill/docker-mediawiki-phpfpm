@@ -1,21 +1,21 @@
 #!/usr/bin/env groovy
 registry_url = "https://index.docker.io/v1/"
-docker_creds_id = "rlewkowicz"
+docker_creds_id = "danyill"
 build_tag = "testing"
-maintainer_name = "rlewkowicz"
+maintainer_name = "danyill"
 container_name = "php-fpm"
 node{
   retry( count: 3  ){
     timeout(time: 7, unit: 'SECONDS') {
       stage('Pull and Update') {
-        git url: 'https://github.com/rlewkowicz/docker-mediawiki-phpfpm.git'
+        git url: 'https://github.com/danyill/docker-mediawiki-phpfpm.git'
         sh './update.sh 7.1'
       }
     }
   }
   stage('Build') {
     echo "Building PHP-FPM with docker.build(${maintainer_name}/${container_name}:${build_tag})"
-    container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '7.1/fpm/alpine')
+    container = docker.build("${maintainer_name}/${container_name}:${build_tag}", '7.1/fpm')
   }
   stage('Test') {
     try {
